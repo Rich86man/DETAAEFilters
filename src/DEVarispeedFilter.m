@@ -42,4 +42,27 @@
                       forId: kVarispeedParam_PlaybackCents];
 }
 
+
+
+- (NSArray *)properties
+{
+    if (!_properties) {
+        _properties = @[[AudioProperty createWithName:@"Playback Rate" min:@0.25 max:@2.0 defaultValue:@1.0 delegate:self],
+                        [AudioProperty createWithName:@"Playback Cents" min:@(-2400) max:@2400 defaultValue:@0.0 delegate:self]];
+    }
+    return _properties;
+}
+
+
+- (void)propertyDidChangeValue:(AudioProperty *)property
+{
+    if ([property.name isEqualToString:@"Playback Rate"]) {
+        self.playbackRate = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Playback Cents"]) {
+        self.playbackCents = [[property currentValue] doubleValue];
+    }
+}
+
+
+
 @end

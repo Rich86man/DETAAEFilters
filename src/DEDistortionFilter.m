@@ -168,4 +168,67 @@
                       forId: kDistortionParam_FinalMix];
 }
 
+
+- (NSArray *)properties
+{
+    if (!_properties) {
+        _properties = @[[AudioProperty createWithName:@"Delay" min:@0.1 max:@500 defaultValue:@.1 delegate:self],
+                        [AudioProperty createWithName:@"Decay" min:@0.1 max:@50 defaultValue:@1.0 delegate:self],
+                        [AudioProperty createWithName:@"Delay Mix" min:@0 max:@100 defaultValue:@50 delegate:self],
+                        [AudioProperty createWithName:@"Decimation" min:@0 max:@100 defaultValue:@0 delegate:self],
+                        [AudioProperty createWithName:@"Rounding" min:@0 max:@100 defaultValue:@0 delegate:self],
+                        [AudioProperty createWithName:@"Decimation Mix" min:@0 max:@100 defaultValue:@50 delegate:self],
+                        [AudioProperty createWithName:@"Linear Term" min:@0 max:@1 defaultValue:@1 delegate:self],
+                        [AudioProperty createWithName:@"Squared Term" min:@0 max:@20 defaultValue:@0 delegate:self],
+                        [AudioProperty createWithName:@"Cubic Term" min:@0 max:@20 defaultValue:@0 delegate:self],
+                        [AudioProperty createWithName:@"Polynomial Mix" min:@0 max:@100 defaultValue:@50 delegate:self],
+                        [AudioProperty createWithName:@"Ring Mod Freq1" min:@.5 max:@8000 defaultValue:@100 delegate:self],
+                        [AudioProperty createWithName:@"Ring Mod Freq2" min:@.5 max:@8000 defaultValue:@100 delegate:self],
+                        [AudioProperty createWithName:@"Ring Mod Balance" min:@0 max:@100 defaultValue:@0 delegate:self],
+                        [AudioProperty createWithName:@"Ring Mod Mix" min:@0 max:@100 defaultValue:@0 delegate:self],
+                        [AudioProperty createWithName:@"Soft Clip Gain" min:@(-80) max:@20 defaultValue:@(-6) delegate:self],
+                        [AudioProperty createWithName:@"Final Mix" min:@0 max:@100 defaultValue:@50 delegate:self]];
+    }
+    return _properties;
+}
+
+
+- (void)propertyDidChangeValue:(AudioProperty *)property
+{
+    if ([property.name isEqualToString:@"Delay"]) {
+        self.delay = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Decay"]) {
+        self.decay = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Delay Mix"]) {
+        self.delayMix = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Decimation"]) {
+        self.decimation = [[property currentValue] doubleValue];
+    } else  if ([property.name isEqualToString:@"Rounding"]) {
+        self.rounding = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Decimation Mix"]) {
+        self.decimationMix = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Linear Term"]) {
+        self.linearTerm = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Squared Term"]) {
+        self.squaredTerm = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Cubic Term"]) {
+        self.cubicTerm = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Polynomial Mix"]) {
+        self.polynomialMix = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Ring Mod Freq1"]) {
+        self.ringModFreq1 = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Ring Mod Freq2"]) {
+        self.ringModFreq2 = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Ring Mod Balance"]) {
+        self.ringModBalance = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Ring Mod Mix"]) {
+        self.ringModMix = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Soft Clip Gain"]) {
+        self.softClipGain = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Final Mix"]) {
+        self.finalMix = [[property currentValue] doubleValue];
+    }
+}
+
+
 @end

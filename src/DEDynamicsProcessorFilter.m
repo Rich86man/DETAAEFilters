@@ -99,4 +99,40 @@
                       forId: kDynamicsProcessorParam_MasterGain];
 }
 
+- (NSArray *)properties
+{
+    if (!_properties) {
+        _properties = @[[AudioProperty createWithName:@"Threshold" min:@(-40) max:@20 defaultValue:@(-20) delegate:self],
+                        [AudioProperty createWithName:@"Head Room" min:@0.1 max:@40 defaultValue:@5 delegate:self],
+                        [AudioProperty createWithName:@"Expansion Ratio" min:@1 max:@50 defaultValue:@2 delegate:self],
+                        [AudioProperty createWithName:@"Expansion Threshold" min:@0 max:@100 defaultValue:@0 delegate:self],
+                        [AudioProperty createWithName:@"Attack Time" min:@0.0001 max:@0.2 defaultValue:@0.001 delegate:self],
+                        [AudioProperty createWithName:@"Release Time" min:@0.01 max:@3 defaultValue:@0.05 delegate:self],
+                        [AudioProperty createWithName:@"Master Gain" min:@(-40) max:@40 defaultValue:@0 delegate:self]];
+    }
+    return _properties;
+}
+
+
+- (void)propertyDidChangeValue:(AudioProperty *)property
+{
+    if ([property.name isEqualToString:@"Threshold"]) {
+        self.threshold = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Head Room"]) {
+        self.headRoom = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Expansion Ratio"]) {
+        self.expansionRatio = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Expansion Threshold"]) {
+        self.expansionThreshold = [[property currentValue] doubleValue];
+    } else  if ([property.name isEqualToString:@"Attack Time"]) {
+        self.attackTime = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Release Time"]) {
+        self.releaseTime = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Master Gain"]) {
+        self.masterGain = [[property currentValue] doubleValue];
+    }
+}
+
+
 @end
+

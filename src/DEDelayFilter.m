@@ -60,4 +60,30 @@
                       forId: kDelayParam_LopassCutoff];
 }
 
+
+- (NSArray *)properties
+{
+    if (!_properties) {
+        _properties = @[[AudioProperty createWithName:@"Wet Dry Mix" min:@0 max:@100 defaultValue:@50 delegate:self],
+                        [AudioProperty createWithName:@"Delay Time" min:@0 max:@2 defaultValue:@1 delegate:self],
+                        [AudioProperty createWithName:@"Feedback" min:@(-100) max:@100 defaultValue:@50 delegate:self],
+                        [AudioProperty createWithName:@"Lopass Cutoff" min:@10 max:@22050 defaultValue:@15000 delegate:self]];
+    }
+    return _properties;
+}
+
+
+- (void)propertyDidChangeValue:(AudioProperty *)property
+{
+    if ([property.name isEqualToString:@"Wet Dry Mix"]) {
+        self.wetDryMix = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Delay Time"]) {
+        self.delayTime = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Feedback"]) {
+        self.feedback = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Lopass Cutoff"]) {
+        self.lopassCutoff = [[property currentValue] doubleValue];
+    }
+}
+
 @end

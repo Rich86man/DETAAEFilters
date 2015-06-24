@@ -9,6 +9,49 @@
 #import "DEAudioUnitFilter.h"
 
 
+@implementation AudioProperty
+
++ (instancetype)createWithName:(NSString *)name
+                           min:(NSNumber *)min
+                           max:(NSNumber *)max
+                  defaultValue:(NSNumber *)defaultValue
+                      delegate:(id <AudioPropertyDelegate>)delegate
+{
+    return [[AudioProperty alloc] initWithName:name
+                                           min:min
+                                           max:max
+                                  defaultValue:defaultValue
+                                      delegate:delegate];
+}
+
+- (instancetype)initWithName:(NSString *)name
+                         min:(NSNumber *)min
+                         max:(NSNumber *)max
+                defaultValue:(NSNumber *)defaultValue
+                    delegate:(id <AudioPropertyDelegate>)delegate
+{
+    self = [super init];
+    _name = name;
+    _min = min;
+    _max = max;
+    _defaultValue = defaultValue;
+    _delegate = delegate;
+    _currentValue = defaultValue;
+    return self;
+}
+
+
+- (void)setCurrentValue:(NSNumber *)currentValue
+{
+    _currentValue = currentValue;
+    if ([self.delegate respondsToSelector:@selector(propertyDidChangeValue:)]) {
+        [self.delegate propertyDidChangeValue:self];
+    }
+}
+
+
+@end
+
 static double getAudioUnitParameterValue(AudioUnit audioUnit, AudioUnitParameterID parameterType) {
     AudioUnitParameterValue value = 0.0;
     OSStatus status = noErr;

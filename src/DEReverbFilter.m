@@ -116,4 +116,51 @@
                       forId: kReverbParam_FilterGain];
 }
 
+
+
+- (NSArray *)properties
+{
+    if (!_properties) {
+        _properties = @[[AudioProperty createWithName:@"Dry Wet Mix" min:@0 max:@100 defaultValue:@100 delegate:self],
+                        [AudioProperty createWithName:@"Gain" min:@(-20) max:@20 defaultValue:@0 delegate:self],
+                        [AudioProperty createWithName:@"Min Delay Time" min:@0.0001 max:@1.0 defaultValue:@0.008 delegate:self],
+                        [AudioProperty createWithName:@"Max Delay Time" min:@0.0001 max:@1.0 defaultValue:@0.050 delegate:self],
+                        [AudioProperty createWithName:@"Decay Time At 0hz" min:@0.001 max:@20 defaultValue:@1.0 delegate:self],
+                        [AudioProperty createWithName:@"Decay Time At Nyquist" min:@0.001 max:@20 defaultValue:@0.5 delegate:self],
+                        [AudioProperty createWithName:@"Randomize Reflections" min:@0 max:@1000 defaultValue:@1 delegate:self],
+                        [AudioProperty createWithName:@"Filter Frequency" min:@10 max:@20000 defaultValue:@800 delegate:self],
+                        [AudioProperty createWithName:@"Filter Bandwidth" min:@0.05 max:@4 defaultValue:@3.0 delegate:self],
+                        [AudioProperty createWithName:@"Filter Gain" min:@(-18) max:@18 defaultValue:@0 delegate:self]];
+    }
+    return _properties;
+}
+
+
+- (void)propertyDidChangeValue:(AudioProperty *)property
+{
+    if ([property.name isEqualToString:@"Dry Wet Mix"]) {
+        self.dryWetMix = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Gain"]) {
+        self.gain = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Min Delay Time"]) {
+        self.minDelayTime = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Max Delay Time"]) {
+        self.maxDelayTime = [[property currentValue] doubleValue];
+    } else  if ([property.name isEqualToString:@"Decay Time At 0hz"]) {
+        self.decayTimeAt0Hz = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Decay Time At Nyquist"]) {
+        self.decayTimeAtNyquist = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Randomize Reflections"]) {
+        self.randomizeReflections = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Filter Frequency"]) {
+        self.filterFrequency = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Filter Bandwidth"]) {
+        self.filterBandwidth = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Filter Gain"]) {
+        self.filterGain = [[property currentValue] doubleValue];
+    }
+}
+
+
+
 @end

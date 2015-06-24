@@ -51,4 +51,29 @@
                       forId: kLimiterParam_PreGain];
 }
 
+
+- (NSArray *)properties
+{
+    if (!_properties) {
+        _properties = @[[AudioProperty createWithName:@"Attack Time" min:@0.001 max:@0.03 defaultValue:@.012 delegate:self],
+                        [AudioProperty createWithName:@"Decay Time" min:@0.001 max:@0.006 defaultValue:@0.024 delegate:self],
+                        [AudioProperty createWithName:@"Pre Gain" min:@(-40) max:@40 defaultValue:@0 delegate:self]];
+    }
+    return _properties;
+}
+
+
+- (void)propertyDidChangeValue:(AudioProperty *)property
+{
+    if ([property.name isEqualToString:@"Attack Time"]) {
+        self.attackTime = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Decay Time"]) {
+        self.decayTime = [[property currentValue] doubleValue];
+    } else if ([property.name isEqualToString:@"Pre Gain"]) {
+        self.preGain = [[property currentValue] doubleValue];
+    }
+}
+
+
+
 @end

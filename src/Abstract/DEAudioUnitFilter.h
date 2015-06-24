@@ -10,10 +10,33 @@
 
 #import "AEAudioUnitFilter.h"
 
+@protocol AudioPropertyDelegate;
+
+@interface AudioProperty : NSObject
+@property (weak, nonatomic) id <AudioPropertyDelegate> delegate;
+@property (strong, nonatomic) NSString *name;
+@property (strong, nonatomic) NSNumber *min;
+@property (strong, nonatomic) NSNumber *max;
+@property (strong, nonatomic) NSNumber *defaultValue;
+@property (strong, nonatomic) NSNumber *currentValue;
+
++ (instancetype)createWithName:(NSString *)name min:(NSNumber *)min max:(NSNumber *)max defaultValue:(NSNumber *)defaultValue delegate:(id <AudioPropertyDelegate>)delegate;
+
+@end
+
+@protocol AudioPropertyDelegate <NSObject>
+
+- (void)propertyDidChangeValue:(AudioProperty *)property;
+@end
+
 @class AEAudioController;
 
-@interface DEAudioUnitFilter : AEAudioUnitFilter
-
+@interface DEAudioUnitFilter : AEAudioUnitFilter <AudioPropertyDelegate>
+{
+    @protected
+    NSArray *_properties;
+}
+@property (strong, nonatomic) NSArray *properties;
 // this will be overridden by subclasses
 +(OSType)audioUnitType;
 
@@ -28,5 +51,7 @@
 
 -(void) setParameterValue: (double)value
                     forId: (AudioUnitParameterID) parameterId;
+
+
 
 @end
