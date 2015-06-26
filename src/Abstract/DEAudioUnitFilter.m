@@ -11,15 +11,16 @@
 
 @implementation AudioProperty
 
+
 + (instancetype)createWithName:(NSString *)name
-                           min:(NSNumber *)min
-                           max:(NSNumber *)max
+                           min:(NSNumber *)minValue
+                           max:(NSNumber *)maxValue
                   defaultValue:(NSNumber *)defaultValue
                       delegate:(id <AudioPropertyDelegate>)delegate
 {
     return [[AudioProperty alloc] initWithName:name
-                                           min:min
-                                           max:max
+                                           min:minValue
+                                           max:maxValue
                                   defaultValue:defaultValue
                                       delegate:delegate];
 }
@@ -38,6 +39,26 @@
     _delegate = delegate;
     _currentValue = defaultValue;
     return self;
+}
+
++ (instancetype)createFromDictionary:(NSDictionary *)dictionary withDelegate:(id <AudioPropertyDelegate>)delegate
+{
+    AudioProperty *property = [self createWithName:dictionary[@"name"] min:dictionary[@"min"] max:dictionary[@"max"] defaultValue:dictionary[@"default"] delegate:nil];
+    property.currentValue = dictionary[@"current"];
+    property.delegate = delegate;
+    return property;
+}
+
+
+- (NSDictionary *)toDictionary
+{
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    dictionary[@"name"] = self.name;
+    dictionary[@"min"] = self.min;
+    dictionary[@"max"] = self.max;
+    dictionary[@"default"] = self.defaultValue;
+    dictionary[@"current"] = self.currentValue;
+    return dictionary;
 }
 
 
@@ -117,6 +138,34 @@ static void setAudioUnitParameterValue(AudioUnit audioUnit, AudioUnitParameterID
         return filter;
     }
 }
+
++ (instancetype)filterFromDictionary:(NSDictionary *)dict withAudioController:(AEAudioController *)controller
+{
+    DEAudioUnitFilter *filter = [[NSClassFromString(dict[@"class"]) alloc] init];
+    
+    NSMutableArray *properties = [NSMutableArray array];
+    for (NSDictionary *propDictionary in dict[@"properties"]) {
+        AudioProperty *property = [AudioProperty createFromDictionary:propDictionary withDelegate:filter];
+        [properties addObject:property];
+        [filter propertyDidChangeValue:property];
+    }
+    filter.properties = properties;
+    return filter;
+}
+
+- (NSDictionary *)toDictionary
+{
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    dict[@"class"] = NSStringFromClass([self class]);
+    NSMutableArray *array = [NSMutableArray array];
+    for (AudioProperty *property in self.properties) {
+        [array addObject:[property toDictionary]];
+    }
+    dict[@"properties"] = array;
+    return dict;
+}
+
+
 
 #pragma mark - Parameter Values
 

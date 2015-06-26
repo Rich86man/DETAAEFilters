@@ -20,8 +20,13 @@
 @property (strong, nonatomic) NSNumber *defaultValue;
 @property (strong, nonatomic) NSNumber *currentValue;
 
-+ (instancetype)createWithName:(NSString *)name min:(NSNumber *)min max:(NSNumber *)max defaultValue:(NSNumber *)defaultValue delegate:(id <AudioPropertyDelegate>)delegate;
-
++ (instancetype)createWithName:(NSString *)name
+                           min:(NSNumber *)minValue
+                           max:(NSNumber *)maxValue
+                  defaultValue:(NSNumber *)defaultValue
+                      delegate:(id <AudioPropertyDelegate>)delegate;
+- (NSDictionary *)toDictionary;
++ (instancetype)createFromDictionary:(NSDictionary *)dictionary withDelegate:(id <AudioPropertyDelegate>)delegate;;
 @end
 
 @protocol AudioPropertyDelegate <NSObject>
@@ -44,8 +49,8 @@
 +(OSType)audioUnitSubtype;
 
 +(instancetype)filterWithAudioController:(AEAudioController *)controller;
-
-
++(instancetype)filterFromDictionary:(NSDictionary *)dict withAudioController:(AEAudioController *)controller;
+- (NSDictionary *)toDictionary;
 // these should only be used by subclasses. Use the properties instead to get and set values.
 -(double) getParameterValueForId:(AudioUnitParameterID) parameterId;
 
